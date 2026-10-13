@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: carol-presentes-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_ONLY
+        value: "true"
+      - key: APP_URL
+        sync: false
+      - key: MP_ACCESS_TOKEN
+        sync: false

@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://carol-presentes-api.onrender.com/api/:path*"
+    }
+  ]
+}

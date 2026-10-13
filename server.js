@@ -6,8 +6,11 @@ const fs = require('node:fs');
 const { MercadoPagoConfig, Preference } = require('mercadopago');
 
 const ROOT = __dirname;
+const HOST = process.env.HOST || '0.0.0.0';
 const PORT = Number(process.env.PORT || 3000);
-const APP_URL = (process.env.APP_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
+const APP_URL = (process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
+const STATIC_ROOT = fs.existsSync(path.join(ROOT, 'public')) ? path.join(ROOT, 'public') : ROOT;
+const API_ONLY = process.env.API_ONLY === 'true';
 const catalog = {
     1: { title: 'Eudora Royal colônia', unit_price: 140.90 },
     2: { title: 'Natura Espécies', unit_price: 240.90 },
@@ -144,27 +147,58 @@ async function createPreference(request, response) {
 }
 
 function serveStatic(request, response) {
-    const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-    const requestedPath = pathname === '/' ? 'loja .app.html' : pathname.slice(1);
-    const filePath = path.resolve(ROOT, requestedPath);
-    if (!filePath.startsWith(ROOT) || !fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+    let pathname;
+    try {
+        pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+    } catch {
+        response.writeHead(400);
+        return response.end('Bad request');
+    }
+
+    const requestedPath = pathname === '/' ? 'index.html' : pathname.slice(1);
+    const filePath = path.resolve(STATIC_ROOT, requestedPath);
+    const legacyIndex = path.resolve(ROOT, 'loja .app.html');
+    const relativePath = path.relative(STATIC_ROOT, filePath);
+
+    if (relativePath === '..' || relativePath.startsWith(`..${path.sep}`) || path.isAbsolute(relativePath)) {
+        response.writeHead(403);
+        return response.end('Forbidden');
+    }
+
+    const topLevelDirectory = relativePath.split(path.sep)[0].toLowerCase();
+    if (relativePath !== 'index.html' && !['css', 'js', 'imag'].includes(topLevelDirectory)) {
         response.writeHead(404);
         return response.end('Not found');
     }
 
-    const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript' };
-    response.writeHead(200, { 'Content-Type': types[path.extname(filePath)] || 'application/octet-stream' });
-    fs.createReadStream(filePath).pipe(response);
+    const finalPath = fs.existsSync(filePath) ? filePath : (pathname === '/' ? legacyIndex : null);
+    if (!finalPath || !fs.existsSync(finalPath) || fs.statSync(finalPath).isDirectory()) {
+        response.writeHead(404);
+        return response.end('Not found');
+    }
+
+    const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.svg': 'image/svg+xml', '.webp': 'image/webp' };
+    response.writeHead(200, { 'Content-Type': types[path.extname(finalPath).toLowerCase()] || 'application/octet-stream' });
+    fs.createReadStream(finalPath).pipe(response);
 }
 
 const server = http.createServer(async (request, response) => {
     if (request.method === 'POST' && request.url === '/api/mercadopago/create-preference') {
         return createPreference(request, response);
     }
-    if (request.method === 'GET') return serveStatic(request, response);
+    if (request.method === 'GET' && request.url === '/healthz') {
+        return sendJson(response, 200, { status: 'ok' });
+    }
+    if (request.method === 'GET') {
+        if (API_ONLY) {
+            response.writeHead(404);
+            return response.end('Not found');
+        }
+        return serveStatic(request, response);
+    }
     sendJson(response, 405, { error: 'Metodo nao permitido.' });
 });
 
-server.listen(PORT, () => {
-    console.log(`Carol Presentes em http://localhost:${PORT}`);
+server.listen(PORT, HOST, () => {
+    console.log(`Carol Presentes em http://${HOST}:${PORT}`);
 });
