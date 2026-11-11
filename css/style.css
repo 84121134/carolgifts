@@ -829,3 +829,185 @@ section:not(.catalog) { padding-top: 8px; }
     .instaGrid { gap: 7px; }
     .footerGrid { grid-template-columns: 1fr; gap: 25px; }
 }
+
+/* Edição especial de Natal */
+:root {
+    --bg: #f7f4ec;
+    --paper: #fffdf8;
+    --ink: #26352b;
+    --muted: #716f62;
+    --line: #e6deca;
+    --rose: #a63e36;
+    --rose2: #f0d7cf;
+    --gold: #bd9854;
+    --dark: #173b2d;
+    --shadow: 0 20px 55px rgba(34, 49, 37, .1);
+}
+
+.top {
+    background: #173b2d;
+    color: #fff8e9;
+    border-bottom: 3px solid #bd9854;
+    letter-spacing: 1.1px;
+}
+
+.header {
+    background: rgba(255, 253, 248, .96);
+    border-bottom-color: #e6deca;
+}
+
+.brand { color: #173b2d; }
+.brand small { color: #8e4037; }
+.nav a:after { background: #a63e36; }
+.nav a:hover { color: #a63e36; }
+.icon { color: #173b2d; border-color: rgba(23, 59, 45, .24); }
+.icon:hover { background: #f4e8d2; border-color: #bd9854; }
+
+.heroCampaign { background: #f5eddd; }
+.heroCampaignCopy {
+    left: 6.5%;
+    width: min(43%, 540px);
+    padding: 30px 34px;
+    background: rgba(255, 253, 246, .91);
+    border: 1px solid rgba(189, 152, 84, .45);
+    border-left: 5px solid #a63e36;
+    border-radius: 8px;
+    box-shadow: 0 18px 48px rgba(34, 49, 37, .13);
+    backdrop-filter: blur(5px);
+}
+
+.heroCampaignCopy .eyebrow {
+    color: #a63e36;
+    letter-spacing: 1.6px;
+}
+
+.heroCampaignCopy h1 { color: #173b2d; }
+.heroCampaignCopy h1 span { color: #a63e36; }
+.heroCampaignCopy p { color: #555b4d; }
+.heroCampaignCopy .primary {
+    background: #a63e36;
+    border-color: #a63e36;
+    color: #fffdf6;
+}
+
+.heroCampaignCopy .primary:hover {
+    background: #86312c;
+    border-color: #86312c;
+}
+
+.heroCampaignCopy .secondary {
+    color: #173b2d;
+    border-color: rgba(23, 59, 45, .35);
+    background: rgba(255, 253, 246, .8);
+}
+
+.holidayMessage {
+    padding: 0;
+    background: #f4ead7;
+    border-top: 1px solid #e6d5b4;
+    border-bottom: 1px solid #e6d5b4;
+}
+
+.holidayMessageInner {
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: #344331;
+}
+
+.holidayMessageIcon { font-size: 24px; }
+.holidayMessage p { margin: 0; font-size: 14px; }
+.holidayMessage p strong { color: #8f3932; }
+.holidayMessage a {
+    margin-left: 12px;
+    color: #173b2d;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.holidayMessage a:hover { color: #a63e36; }
+.quickCollections { background: #f7f4ec; }
+.quickItem {
+    background: #fffdf8;
+    border-color: #e6deca;
+    border-radius: 16px;
+}
+
+.quickIcon {
+    background: #f5eddd;
+    border-color: #e6d5b4;
+}
+
+.campaignBanners { background: #fffdf8; }
+.campaignBanner {
+    border-color: #e6deca;
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(34, 49, 37, .06);
+}
+
+.catalog {
+    background: #fbfaf5;
+    border-color: #e6deca;
+}
+
+.filter.active { background: #173b2d; }
+.filter:hover, .sectionLink:hover { color: #a63e36; }
+.filter:hover { border-color: #a63e36; }
+.product { border-color: rgba(23, 59, 45, .1); }
+.product:hover { border-color: rgba(166, 62, 54, .32); }
+.badge {
+    background: #a63e36;
+    color: #fffdf6;
+}
+
+.add {
+    background: #173b2d;
+    border-color: #173b2d;
+    color: #fffdf6;
+}
+
+.add:hover { background: #a63e36; }
+.instagram { background: #f7f4ec; }
+.insta { background: linear-gradient(135deg, #dce5d8, #f3e5cc); }
+.footer { background: #173b2d; }
+.count { background: #a63e36; }
+.checkout { background: #173b2d; }
+.checkout:hover { background: #a63e36; }
+
+@media(max-width: 900px) {
+    .heroCampaignCopy {
+        left: 4%;
+        width: min(48%, 420px);
+        padding: 22px;
+    }
+
+    .heroCampaignCopy h1 { font-size: clamp(36px, 4vw, 48px); }
+    .heroCampaignCopy p { font-size: 14px; line-height: 1.6; }
+    .heroCampaignCopy .buttons { gap: 8px; flex-wrap: wrap; }
+    .heroCampaignCopy .btn { padding: 12px 14px; font-size: 12px; }
+}
+
+@media(max-width: 640px) {
+    .heroCampaignCopy {
+        left: 12px;
+        width: min(72%, 280px);
+        padding: 16px;
+        background: rgba(255, 253, 246, .94);
+    }
+
+    .heroCampaignCopy .eyebrow { font-size: 8px; }
+    .heroCampaignCopy h1 { font-size: 34px; }
+    .heroCampaignCopy p { font-size: 12px; }
+    .quickCollectionGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .quickItem { min-height: 118px; gap: 8px; }
+    .quickItem span:last-child { font-size: 13px; }
+    .quickItem:last-child { grid-column: 1 / -1; width: calc(50% - 5px); justify-self: center; }
+    .holidayMessageInner { min-height: 88px; gap: 8px; justify-content: flex-start; }
+    .holidayMessageIcon { font-size: 20px; }
+    .holidayMessage p { font-size: 12px; line-height: 1.4; }
+    .holidayMessage a { margin-left: auto; font-size: 11px; }
+}
